@@ -1,0 +1,41 @@
+- hosts: localhost
+
+  tasks:
+    # Not proud of this part, app settings should be offered as ansible module.
+    - name: Change settings folder owner
+      file: 
+        path: '/etc/yunohost/apps/{{ app_name }}'
+        owner: admin
+        mode: 0500
+        recurse: yes
+      notify: Restore settings folder owner
+      sudo: yes
+
+    - name: Fetch app settings
+      include_vars: '/etc/yunohost/apps/{{ app_name }}/settings.yml'
+      # sudo not apply to include_vars.
+      # sudo: yes
+
+    - name: Remove anarchism package
+      apt: name=anarchism state=absent
+      sudo: yes
+
+    - name: Remove nginx conf
+      file: 
+        path: '/etc/nginx/conf.d/{{ domain }}.d/{{ app_name }}.conf'
+        state: absent
+      sudo: yes
+      notify: Reload nginx
+
+  handlers:
+    - name: Reload nginx
+      service: name=nginx state=reloaded
+      sudo: yes
+
+    - name: Restore settings folder owner
+      file: 
+        path: '/etc/yunohost/apps/{{ app_name }}'
+        owner: root
+        mode: 0400
+        recurse: yes
+      sudo: yes

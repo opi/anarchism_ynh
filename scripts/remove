@@ -1,17 +1,15 @@
 #!/bin/bash
+set -e
+
+# App name
 app=anarchism
 
-# Retrieve arguments
-domain=$(sudo yunohost app setting $app domain)
-path=$(sudo yunohost app setting $app path)
-is_public=$(sudo yunohost app setting $app is_public)
+# Install ansible
+sudo apt-get install -y -qq ansible
 
-# Remove sources
-sudo apt-get remove anarchism
-
-# Remove configuration files
-sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
-
-# Restart services
-sudo service nginx reload
-sudo yunohost app ssowatconf
+# Run ansible remove playbook
+ansible-playbook \
+    ansible/playbooks/remove.yml \
+    -i localhost, \
+    -c local \
+    -e "app_name=$app"

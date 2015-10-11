@@ -1,0 +1,31 @@
+- hosts: localhost
+
+  tasks:
+    - name: Install anarchism package
+      apt: name=anarchism
+      sudo: yes
+
+    - name: Check and reserve app domain/path
+      command: 'yunohost app checkurl {{ domain }}{{ path }} -a {{ app_name }}'
+      sudo: yes
+
+    - name: Save is_public app setting
+      command: 'yunohost app setting {{ app_name }} is_public -v {{ is_public }}'
+      sudo: yes
+
+    - name: Put Nginx conf
+      template: 
+        src: ../templates/nginx_anarchism.conf.j2
+        dest: '/etc/nginx/conf.d/{{ domain }}.d/{{ app_name }}.conf'
+      sudo: yes
+      notify: Reload nginx
+
+    - name: Unprotect public uri
+      command: 'yunohost app setting {{ app_name }} unprotected_uris -v /'
+      when: is_public == "Yes"
+      sudo: yes
+
+  handlers:
+    - name: Reload nginx
+      service: name=nginx state=reloaded
+      sudo: yes

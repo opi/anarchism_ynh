@@ -1,5 +1,5 @@
-location YNH_WWW_PATH {
-  alias YNH_WWW_ALIAS ;
+location {{ path }} {
+  alias /usr/share/doc/anarchism/html ;
 
   # Force https
   if ($scheme = http) {
