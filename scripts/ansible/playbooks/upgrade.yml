@@ -3,7 +3,7 @@
   tasks:
     # Not proud of this part, app settings should be offered as ansible module.
     - name: Change settings folder owner
-      file: 
+      file:
         path: '/etc/yunohost/apps/{{ app_name }}'
         owner: admin
         mode: 0500
@@ -14,38 +14,19 @@
     - name: Fetch app settings
       include_vars: '/etc/yunohost/apps/{{ app_name }}/settings.yml'
 
-    - name: Upgrade anarchism 
-      apt: 
-        name: anarchism
-        update_cache: yes
-        cache_valid_time: 600
-      sudo: yes
-
     - name: Remove trailing slash in app path
-      set_fact: 
+      set_fact:
         path: '{{ path[:-1] }}'
 
-    - name: Put Nginx conf
-      template: 
-        src: ../templates/nginx_anarchism.conf.j2
-        dest: '/etc/nginx/conf.d/{{ domain }}.d/{{ app_name }}.conf'
-      sudo: yes
-      notify: Reload nginx
-
-    - name: Unprotect public uri
-      command: 'yunohost app setting {{ app_name }} unprotected_uris -v /'
-      when: is_public == "Yes"
-      sudo: yes
+    - include: tasks/sources.yml
+    - include: tasks/config.yml
 
   handlers:
-    - name: Reload nginx
-      service: name=nginx state=reloaded
-      sudo: yes
-
+    - include: handlers/main.yml
     - name: Restore settings folder owner
-      file: 
+      file:
         path: '/etc/yunohost/apps/{{ app_name }}'
-        owner: root
         mode: 0400
         recurse: yes
+        owner: root
       sudo: yes
