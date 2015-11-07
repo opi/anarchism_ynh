@@ -1,0 +1,19 @@
+# Not proud of this part, app settings should be offered as ansible module.
+- name: Change settings folder owner
+  file:
+    path: '/etc/yunohost/apps/{{ app_name }}'
+    owner: admin
+    mode: 0500
+    recurse: yes
+  notify: Restore settings folder owner
+  sudo: yes
+
+- name: Fetch app settings
+  include_vars: '/etc/yunohost/apps/{{ app_name }}/settings.yml'
+
+- name: Remove trailing slash in app path
+  set_fact:
+    path: '{{ path[:-1] }}'
+
+- include: ../tasks/sources.yml
+- include: ../tasks/config.yml
