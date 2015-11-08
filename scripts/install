@@ -8,11 +8,4 @@ app=anarchism
 sudo apt-get install -y -qq ansible
 
 # Run ansible install playbook
-ansible-playbook \
-    ansible/playbooks/install.yml \
-    -i localhost, \
-    -c local \
-    -e "app_name=$app \
-        domain=$1 \
-        path=$2 \
-        is_public=$3"
+ynh_ansible_operation install $app "domain=$1 path=$2 is_public=$3"

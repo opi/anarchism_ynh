@@ -7,9 +7,5 @@ app=anarchism
 # Install ansible
 sudo apt-get install -y -qq ansible
 
-# Run ansible remove playbook
-ansible-playbook \
-    ansible/playbooks/upgrade.yml \
-    -i localhost, \
-    -c local \
-    -e "app_name=$app"
+# Run ansible upgrade playbook
+ynh_ansible_operation upgrade $app

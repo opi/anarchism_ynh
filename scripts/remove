@@ -8,8 +8,4 @@ app=anarchism
 sudo apt-get install -y -qq ansible
 
 # Run ansible remove playbook
-ansible-playbook \
-    ansible/playbooks/remove.yml \
-    -i localhost, \
-    -c local \
-    -e "app_name=$app"
+ynh_ansible_operation remove $app
