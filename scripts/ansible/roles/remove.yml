@@ -1,13 +1,10 @@
-- name: Fetch app settings
-  include_vars: '/etc/yunohost/apps/{{ app_name }}/settings.yml'
-
 - name: Remove anarchism package
   apt: name=anarchism state=absent
   sudo: yes
 
 - name: Remove nginx conf
   file:
-    path: '/etc/nginx/conf.d/{{ domain }}.d/{{ app_name }}.conf'
+    path: '/etc/nginx/conf.d/{{ ynh_app_settings.domain }}.d/{{ app_name }}.conf'
     state: absent
   sudo: yes
   notify: Reload nginx

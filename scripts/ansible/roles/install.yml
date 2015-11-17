@@ -1,5 +1,9 @@
-- name: Check and reserve app domain/path
-  command: 'yunohost app checkurl {{ domain }}{{ path }} -a {{ app_name }}'
+- name: Save app settings
+  ynh_app:
+    name: "{{ app_name }}"
+    url: "{{ domain }}{{ path }}"
+    settings:
+      is_public: "{{ is_public }}"
   sudo: yes
 
 - include: ../includes/sources.yml
