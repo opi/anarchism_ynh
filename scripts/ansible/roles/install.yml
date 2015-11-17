@@ -2,10 +2,10 @@
   command: 'yunohost app checkurl {{ domain }}{{ path }} -a {{ app_name }}'
   sudo: yes
 
-- include: ../tasks/sources.yml
+- include: ../includes/sources.yml
 
 - name: Save is_public app setting
   command: 'yunohost app setting {{ app_name }} is_public -v {{ is_public }}'
   sudo: yes
 
-- include: ../tasks/config.yml
+- include: ../includes/config.yml

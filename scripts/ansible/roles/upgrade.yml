@@ -15,5 +15,5 @@
   set_fact:
     path: '{{ path[:-1] }}'
 
-- include: ../tasks/sources.yml
-- include: ../tasks/config.yml
+- include: ../includes/sources.yml
+- include: ../includes/config.yml
