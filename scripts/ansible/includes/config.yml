@@ -1,11 +1,14 @@
 - name: Put Nginx conf
   template:
     src: ../templates/nginx_anarchism.conf.j2
-    dest: '/etc/nginx/conf.d/{{ domain }}.d/{{ app_name }}.conf'
+    dest: '/etc/nginx/conf.d/{{ ynh_app_settings.domain }}.d/{{ app_name }}.conf'
   sudo: yes
   notify: Reload nginx
 
 - name: Unprotect public uri
-  command: 'yunohost app setting {{ app_name }} unprotected_uris -v /'
-  when: is_public == "Yes"
+  ynh_app:
+    name: anarchism
+    settings:
+      unprotected_uris: /
+  when: ynh_app_settings.is_public == "Yes"
   sudo: yes
