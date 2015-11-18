@@ -7,9 +7,4 @@
   sudo: yes
 
 - include: ../includes/sources.yml
-
-- name: Save is_public app setting
-  command: 'yunohost app setting {{ app_name }} is_public -v {{ is_public }}'
-  sudo: yes
-
 - include: ../includes/config.yml
